@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:7.0
+    container_name: comp3123_mongodb
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_DATABASE: comp3123_assignment2
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - comp3123_network
+
+volumes:
+  mongodb_data:
+    driver: local
+
+networks:
+  comp3123_network:
+    driver: bridge
