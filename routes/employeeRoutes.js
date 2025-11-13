@@ -1,4 +1,5 @@
 const express = require('express');
+const multer = require('multer');
 const { body, validationResult } = require('express-validator');
 const {
   getAllEmployees,
@@ -130,8 +131,6 @@ router.post(
   protect,
   upload.single('profile_picture'),
   handleMulterError,
-  validateEmployee,
-  handleValidationErrors,
   createEmployee
 );
 router.get('/:id', protect, getEmployeeById);
@@ -140,8 +139,6 @@ router.put(
   protect,
   upload.single('profile_picture'),
   handleMulterError,
-  validateEmployeeUpdate,
-  handleValidationErrors,
   updateEmployee
 );
 router.delete('/:id', protect, deleteEmployee);

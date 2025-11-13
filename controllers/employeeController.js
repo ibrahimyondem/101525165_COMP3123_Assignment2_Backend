@@ -29,10 +29,32 @@ const createEmployee = async (req, res) => {
   try {
     const { first_name, last_name, email, position, salary, date_of_joining, department } = req.body;
 
+    // Validate required fields
+    if (!first_name || !last_name || !email || !position || !salary || !date_of_joining || !department) {
+      // Delete uploaded file if validation fails
+      if (req.file) {
+        fs.unlink(path.join('./uploads', req.file.filename), (err) => {
+          if (err) console.error('Error deleting file:', err);
+        });
+      }
+      
+      return res.status(400).json({
+        status: false,
+        message: 'All fields are required: first_name, last_name, email, position, salary, date_of_joining, department',
+      });
+    }
+
     // Check if employee already exists
     const employeeExists = await Employee.findOne({ email });
 
     if (employeeExists) {
+      // Delete uploaded file if employee exists
+      if (req.file) {
+        fs.unlink(path.join('./uploads', req.file.filename), (err) => {
+          if (err) console.error('Error deleting file:', err);
+        });
+      }
+      
       return res.status(400).json({
         status: false,
         message: 'Employee already exists with this email',
