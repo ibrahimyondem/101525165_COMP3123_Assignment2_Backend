@@ -14,6 +14,36 @@ services:
     networks:
       - comp3123_network
 
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: comp3123_backend
+    restart: always
+    ports:
+      - "3001:3001"
+    env_file:
+      - .env
+    environment:
+      MONGO_URI: mongodb://mongodb:27017/comp3123_assignment2
+    depends_on:
+      - mongodb
+    networks:
+      - comp3123_network
+
+  frontend:
+    build:
+      context: ../101525165_comp3123_assignment2_reactjs
+      dockerfile: Dockerfile
+    container_name: comp3123_frontend
+    restart: always
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    networks:
+      - comp3123_network
+
 volumes:
   mongodb_data:
     driver: local
